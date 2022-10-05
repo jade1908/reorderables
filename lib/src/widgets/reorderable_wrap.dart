@@ -36,6 +36,8 @@ class ReorderableWrap extends StatefulWidget {
   ReorderableWrap({
     required this.children,
     required this.onReorder,
+    this.elevation,
+    this.radius,
     this.header,
     this.footer,
     this.controller,
@@ -63,6 +65,7 @@ class ReorderableWrap extends StatefulWidget {
     this.enableReorder = true,
     Key? key,
   }) :
+
 //        assert(
 //          children.every((Widget w) => w.key != null),
 //          'All children of this widget must have a key.',
@@ -74,6 +77,10 @@ class ReorderableWrap extends StatefulWidget {
   /// If null, no header will appear before the list.
   final List<Widget>? header;
   final Widget? footer;
+
+//added by me, JD
+  final double? elevation;
+  final double? radius;
 
   /// A custom scroll [controller].
   /// To control the initial scroll offset of the scroll view, provide a
@@ -277,33 +284,34 @@ class _ReorderableWrapState extends State<ReorderableWrap> {
       opaque: false,
       builder: (BuildContext context) {
         return _ReorderableWrapContent(
-          header: widget.header,
-          footer: widget.footer,
-          children: widget.children,
-          direction: widget.direction,
-          scrollDirection: widget.scrollDirection,
-          scrollPhysics: widget.scrollPhysics,
-          onReorder: widget.onReorder,
-          onNoReorder: widget.onNoReorder,
-          onReorderStarted: widget.onReorderStarted,
-          padding: widget.padding,
-          buildItemsContainer: widget.buildItemsContainer,
-          buildDraggableFeedback: widget.buildDraggableFeedback,
-          needsLongPressDraggable: widget.needsLongPressDraggable,
-          alignment: widget.alignment,
-          spacing: widget.spacing,
-          runAlignment: widget.runAlignment,
-          runSpacing: widget.runSpacing,
-          crossAxisAlignment: widget.crossAxisAlignment,
-          textDirection: widget.textDirection,
-          verticalDirection: widget.verticalDirection,
-          minMainAxisCount: widget.minMainAxisCount,
-          maxMainAxisCount: widget.maxMainAxisCount,
-          controller: widget.controller,
-          reorderAnimationDuration: widget.reorderAnimationDuration,
-          scrollAnimationDuration: widget.scrollAnimationDuration,
-          enableReorder: widget.enableReorder,
-        );
+            header: widget.header,
+            footer: widget.footer,
+            children: widget.children,
+            direction: widget.direction,
+            scrollDirection: widget.scrollDirection,
+            scrollPhysics: widget.scrollPhysics,
+            onReorder: widget.onReorder,
+            onNoReorder: widget.onNoReorder,
+            onReorderStarted: widget.onReorderStarted,
+            padding: widget.padding,
+            buildItemsContainer: widget.buildItemsContainer,
+            buildDraggableFeedback: widget.buildDraggableFeedback,
+            needsLongPressDraggable: widget.needsLongPressDraggable,
+            alignment: widget.alignment,
+            spacing: widget.spacing,
+            runAlignment: widget.runAlignment,
+            runSpacing: widget.runSpacing,
+            crossAxisAlignment: widget.crossAxisAlignment,
+            textDirection: widget.textDirection,
+            verticalDirection: widget.verticalDirection,
+            minMainAxisCount: widget.minMainAxisCount,
+            maxMainAxisCount: widget.maxMainAxisCount,
+            controller: widget.controller,
+            reorderAnimationDuration: widget.reorderAnimationDuration,
+            scrollAnimationDuration: widget.scrollAnimationDuration,
+            enableReorder: widget.enableReorder,
+            elevation: widget.elevation,
+            radius: widget.radius);
       },
     );
   }
@@ -345,6 +353,8 @@ class _ReorderableWrapContent extends StatefulWidget {
       required this.verticalDirection,
       required this.minMainAxisCount,
       required this.maxMainAxisCount,
+      required this.elevation,
+      required this.radius,
       this.header,
       this.footer,
       this.controller,
@@ -352,6 +362,8 @@ class _ReorderableWrapContent extends StatefulWidget {
       this.scrollAnimationDuration = const Duration(milliseconds: 200),
       required this.enableReorder});
 
+  final double? elevation;
+  final double? radius;
   final List<Widget>? header;
   final Widget? footer;
   final ScrollController? controller;
@@ -811,7 +823,11 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
             _draggingFeedbackSize!); //renderObject.constraints
 //          debugPrint('feedbackBuilder: contentConstraints:$contentSizeConstraints');
         return (widget.buildDraggableFeedback ?? defaultBuildDraggableFeedback)(
-            context, contentSizeConstraints, toWrap);
+            context,
+            contentSizeConstraints,
+            toWrap,
+            widget.elevation,
+            widget.radius);
       });
 
       bool isReorderable = widget.enableReorder;
@@ -1263,16 +1279,20 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
   }
 
   Widget defaultBuildDraggableFeedback(
-      BuildContext context, BoxConstraints constraints, Widget child) {
+      BuildContext context,
+      BoxConstraints constraints,
+      Widget child,
+      double elevation,
+      double radius) {
     return Transform(
       transform: new Matrix4.rotationZ(0),
       alignment: FractionalOffset.topLeft,
       child: Material(
         child:
             Card(child: ConstrainedBox(constraints: constraints, child: child)),
-        elevation: 0.0,
+        elevation: elevation,
         color: Colors.transparent,
-        borderRadius: BorderRadius.zero,
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
       ),
     );
   }
