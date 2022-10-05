@@ -1288,6 +1288,7 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
       transform: new Matrix4.rotationZ(0),
       alignment: FractionalOffset.topLeft,
       child: Material(
+        type: MaterialType.transparency,
         child: ConstrainedBox(constraints: constraints, child: child),
         elevation: elevation,
         color: Colors.transparent,
