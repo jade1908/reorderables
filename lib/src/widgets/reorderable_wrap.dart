@@ -1289,9 +1289,16 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
       alignment: FractionalOffset.topLeft,
       child: Material(
         type: MaterialType.transparency,
-        child: ConstrainedBox(constraints: constraints, child: child),
-        elevation: elevation,
-        shadowColor: Colors.black38,
+        child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                  color: Colors.black38,
+                  blurRadius: elevation,
+                  offset: Offset(0, elevation / 2))
+            ]),
+            child: ConstrainedBox(constraints: constraints, child: child)),
+        //elevation: elevation,
+
         color: Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
       ),
