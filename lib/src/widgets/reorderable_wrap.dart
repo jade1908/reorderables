@@ -79,7 +79,7 @@ class ReorderableWrap extends StatefulWidget {
   final Widget? footer;
 
 //added by me, JD
-  final double? elevation;
+  final BoxShadow? elevation;
   final double? radius;
 
   /// A custom scroll [controller].
@@ -362,7 +362,7 @@ class _ReorderableWrapContent extends StatefulWidget {
       this.scrollAnimationDuration = const Duration(milliseconds: 200),
       required this.enableReorder});
 
-  final double? elevation;
+  final BoxShadow? elevation;
   final double? radius;
   final List<Widget>? header;
   final Widget? footer;
@@ -1282,7 +1282,7 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
       BuildContext context,
       BoxConstraints constraints,
       Widget child,
-      double elevation,
+      BoxShadow elevation,
       double radius) {
     return Transform(
       transform: new Matrix4.rotationZ(0),
@@ -1290,15 +1290,8 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
       child: Material(
         type: MaterialType.transparency,
         child: Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  color: Colors.black38,
-                  blurRadius: elevation,
-                  offset: Offset(0, elevation / 2))
-            ]),
+            decoration: BoxDecoration(boxShadow: [elevation]),
             child: ConstrainedBox(constraints: constraints, child: child)),
-        //elevation: elevation,
-
         color: Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
       ),
