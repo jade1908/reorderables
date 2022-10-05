@@ -1290,7 +1290,9 @@ class _ReorderableWrapContentState extends State<_ReorderableWrapContent>
       child: Material(
         type: MaterialType.transparency,
         child: Container(
-            decoration: BoxDecoration(boxShadow: [elevation]),
+            decoration: BoxDecoration(
+                boxShadow: [elevation],
+                borderRadius: BorderRadius.all(Radius.circular(radius))),
             child: ConstrainedBox(constraints: constraints, child: child)),
         color: Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
